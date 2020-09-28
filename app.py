@@ -210,7 +210,7 @@ class CMainApplication(object):
         glfw.set_window_title(self.window, f'hello_vr -- {driver} {display}')
         self.b_init_gl()
         assert openvr.VRCompositor()
-        action_path = pkg_resources.resource_filename('samples', 'hellovr_actions.json')
+        action_path = pkg_resources.resource_filename('res', 'bindings.json')
         openvr.VRInput().setActionManifestPath(action_path)
         self.action_hide_cubes = openvr.VRInput().getActionHandle('/actions/demo/in/HideCubes')
         self.action_hide_this_controller = openvr.VRInput().getActionHandle('/actions/demo/in/HideThisController')
@@ -740,7 +740,7 @@ class CMainApplication(object):
         GL.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, 0)
 
     def set_up_texture_maps(self):
-        ts = pkg_resources.resource_stream('samples', 'cube_texture.png')
+        ts = pkg_resources.resource_stream('res', 'cube_texture.png')
         image = Image.open(ts).convert('RGBA')
         width, height = image.size
         image_data = numpy.array(list(image.getdata()), numpy.uint8)
