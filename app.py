@@ -210,7 +210,8 @@ class CMainApplication(object):
         glfw.set_window_title(self.window, f'hello_vr -- {driver} {display}')
         self.b_init_gl()
         assert openvr.VRCompositor()
-        openvr.VRInput().setActionManifestPath(sys.path[0]+'/res/bindings.json')
+        action_path = sys.path[0]+'/res/bindings.json'
+        openvr.VRInput().setActionManifestPath(action_path)
         self.action_hide_cubes = openvr.VRInput().getActionHandle('/actions/demo/in/HideCubes')
         self.action_hide_this_controller = openvr.VRInput().getActionHandle('/actions/demo/in/HideThisController')
         self.action_trigger_haptic = openvr.VRInput().getActionHandle('/actions/demo/in/TriggerHaptic')
@@ -561,21 +562,21 @@ class CMainApplication(object):
             self.render_controller_axes()
             self.render_stereo_targets()
             self.render_companion_window()
-            left_eye_texture = openvr.Texture_t(
-                handle=self.left_eye_desc.resolve_texture_id,
-                eType=openvr.TextureType_OpenGL,
-                eColorSpace=openvr.ColorSpace_Gamma,
-            )
-            right_eye_texture = openvr.Texture_t(
-                handle=self.right_eye_desc.resolve_texture_id,
-                eType=openvr.TextureType_OpenGL,
-                eColorSpace=openvr.ColorSpace_Gamma,
-            )
-            try:
-                openvr.VRCompositor().submit(openvr.Eye_Left, left_eye_texture)
-                openvr.VRCompositor().submit(openvr.Eye_Right, right_eye_texture)
-            except openvr.error_code.CompositorError_DoNotHaveFocus:
-                pass  # First frame fails because waitGetPoses has not been called yet
+#            left_eye_texture = openvr.Texture_t(
+#                handle=self.left_eye_desc.resolve_texture_id,
+#                eType=openvr.TextureType_OpenGL,
+#                eColorSpace=openvr.ColorSpace_Gamma,
+#            )
+#            right_eye_texture = openvr.Texture_t(
+#                handle=self.right_eye_desc.resolve_texture_id,
+#                eType=openvr.TextureType_OpenGL,
+#                eColorSpace=openvr.ColorSpace_Gamma,
+#            )
+#            try:
+#                openvr.VRCompositor().submit(openvr.Eye_Left, left_eye_texture)
+#                openvr.VRCompositor().submit(openvr.Eye_Right, right_eye_texture)
+#            except openvr.error_code.CompositorError_DoNotHaveFocus:
+#                pass  # First frame fails because waitGetPoses has not been called yet
 
         if (self.tracked_controller_count != self.tracked_controller_count_previous
                 or self.valid_pose_count != self.valid_pose_count_previous):
