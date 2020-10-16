@@ -210,7 +210,7 @@ class CMainApplication(object):
         glfw.set_window_title(self.window, f'hello_vr -- {driver} {display}')
         self.b_init_gl()
         assert openvr.VRCompositor()
-        action_path = sys.path[0]+'/res/bindings.json'
+        action_path = sys.path[0]+'/res/hellovr_actions.json'
         openvr.VRInput().setActionManifestPath(action_path)
         self.action_hide_cubes = openvr.VRInput().getActionHandle('/actions/demo/in/HideCubes')
         self.action_hide_this_controller = openvr.VRInput().getActionHandle('/actions/demo/in/HideThisController')
