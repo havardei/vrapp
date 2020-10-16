@@ -562,21 +562,21 @@ class CMainApplication(object):
             self.render_controller_axes()
             self.render_stereo_targets()
             self.render_companion_window()
-#            left_eye_texture = openvr.Texture_t(
-#                handle=self.left_eye_desc.resolve_texture_id,
-#                eType=openvr.TextureType_OpenGL,
-#                eColorSpace=openvr.ColorSpace_Gamma,
-#            )
-#            right_eye_texture = openvr.Texture_t(
-#                handle=self.right_eye_desc.resolve_texture_id,
-#                eType=openvr.TextureType_OpenGL,
-#                eColorSpace=openvr.ColorSpace_Gamma,
-#            )
-#            try:
-#                openvr.VRCompositor().submit(openvr.Eye_Left, left_eye_texture)
-#                openvr.VRCompositor().submit(openvr.Eye_Right, right_eye_texture)
-#            except openvr.error_code.CompositorError_DoNotHaveFocus:
-#                pass  # First frame fails because waitGetPoses has not been called yet
+            left_eye_texture = openvr.Texture_t(
+                handle=self.left_eye_desc.resolve_texture_id,
+                eType=openvr.TextureType_OpenGL,
+                eColorSpace=openvr.ColorSpace_Gamma,
+            )
+            right_eye_texture = openvr.Texture_t(
+                handle=self.right_eye_desc.resolve_texture_id,
+                eType=openvr.TextureType_OpenGL,
+                eColorSpace=openvr.ColorSpace_Gamma,
+            )
+            try:
+                openvr.VRCompositor().submit(openvr.Eye_Left, left_eye_texture)
+                openvr.VRCompositor().submit(openvr.Eye_Right, right_eye_texture)
+            except openvr.error_code.CompositorError_DoNotHaveFocus:
+                pass  # First frame fails because waitGetPoses has not been called yet
 
         if (self.tracked_controller_count != self.tracked_controller_count_previous
                 or self.valid_pose_count != self.valid_pose_count_previous):
