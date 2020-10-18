@@ -1,0 +1,44 @@
+//Cg
+/* Generated shader for render state 0A05A6CC:
+  AlphaTestAttrib:greater,0
+  ShaderAttrib
+  TextureAttrib:on default:cloud_atlas
+  TransparencyAttrib:alpha
+*/
+void vshader(
+	 in float4 vtx_texcoord0 : TEXCOORD0,
+     in uniform float4 offset,
+     in uniform float4 uv,
+	 out float4 l_texcoord0 : TEXCOORD0,
+     out float4 l_texcoord1 : TEXCOORD1,
+     in float4 vtx_normal : TEXCOORD2,
+	 float4 vtx_position : POSITION,
+	 out float4 l_position : POSITION,     
+	 uniform float4x4 mat_modelproj,
+     in float4 vtx_color : COLOR,
+	 uniform float4x4 tpose_view_to_model,
+     out float4 l_color : COLOR
+) {
+     float4 pos=mul(mat_modelproj, vtx_position);
+	 l_position = pos;
+	 l_texcoord0 = vtx_texcoord0+offset+float4(uv.xy,0.0,0.0);
+     l_texcoord1 = vtx_texcoord0+offset+float4(uv.zw,0.0,0.0);
+     l_color= vtx_color;
+}
+
+void fshader(
+     in uniform float time,          
+	 uniform sampler2D tex_0,
+	 in float4 l_texcoord0 : TEXCOORD0,
+     in float4 l_texcoord1 : TEXCOORD1,
+	 out float4 o_color : COLOR0,
+	 uniform float4 attr_color,
+     uniform float4 attr_colorscale,
+     in float4 l_color : COLOR
+) {
+	 // Fetch all textures.
+	 float4 tex0 = tex2D(tex_0, l_texcoord0.xy);
+     float4 tex1 = tex2D(tex_0, l_texcoord1.xy);	 
+	 o_color = float4(l_color.rgb+attr_color.rgb, lerp(tex0.a, tex1.a, time))*attr_colorscale;
+     //o_color = lerp(tex0, tex1, time)*attr_colorscale;
+}
