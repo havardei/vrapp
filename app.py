@@ -4,6 +4,49 @@ from direct.actor.Actor import Actor
 import direct.directbase.DirectStart
 import random
 
+livedata = False
+
+def updatePose(boat):
+    MAXP = 30
+    MINP = -30
+    MAXR = 5
+    MINR = -5
+
+    if(livedata):
+        print(boat.getH())
+        print(boat.getP())
+        print(boat.getR())
+    else:
+        if boat.pport:
+            if boat.getP()<0:
+                boat.setP(boat.getP()+(1-(boat.getP()/MINP)))
+            elif boat.getP()<MAXP-1:
+                boat.setP(boat.getP()+(1-(boat.getP()/MAXP)))
+            if boat.getP() >= MAXP-1:
+                boat.pport = False
+        else:
+            if boat.getP()>0:
+                boat.setP(boat.getP()-(1-(boat.getP()/MAXP)))
+            elif boat.getP()>MINP:
+                boat.setP(boat.getP()-(1-(boat.getP()/MINP)))
+            if boat.getP() <= MINP+1:
+                boat.pport = True
+
+        if boat.rbow:
+            if boat.getR()<0:
+                boat.setR(boat.getR()+(1-(boat.getR()/MINR))/10)
+            elif boat.getR()<MAXR-1:
+                boat.setR(boat.getR()+(1-(boat.getR()/MAXR))/10)
+            if boat.getR() >= MAXR-1:
+                boat.rbow = False
+        else:
+            if boat.getR()>0:
+                boat.setR(boat.getR()-(1-(boat.getR()/MAXR))/10)
+            elif boat.getR()>MINR:
+                boat.setR(boat.getR()-(1-(boat.getR()/MINR))/10)
+            if boat.getR() <= MINR+1:
+                boat.rbow = True
+
 
 class World(DirectObject):
     def __init__(self):
@@ -106,18 +149,19 @@ class World(DirectObject):
         dlnp.setHpr(0, 180+20, 0)
         render.setShaderInput("dlight0", dlnp)
         render.setLight(dlnp)
-        self.pandaActor = Actor("res/boat.obj")
-        self.pandaActor.setZ(-2)
-        self.pandaActor.setScale(0.01)
-        self.pandaActor.reparentTo(render)
-        #self.pandaActor.loop("walk")
+        self.boat = Actor("res/boat.obj")
+        self.boat.setZ(-2)
+        self.boat.setScale(0.01)
+        self.boat.pport = True
+        self.boat.rbow = True
+        self.boat.reparentTo(render)
         base.camera.setPosHpr(15,-70,15,10,-7.42,0)
+        #self.wCamera.lookAt(self.boat)
 
     def update(self, task):
-#       base.camera.setPosHpr(15,-70,15,10,-7.42,0)
+        updatePose(self.boat)
         self.time+=task.time*self.cloud_speed
         self.offset+=task.time
-#       print('X'+str(self.wCamera.getX())+'Y'+str(self.wCamera.getY())+'Z'+str(self.wCamera.getX()))
         #water
         self.wCamera.setMat(base.cam.getMat(render)*self.wPlane.getReflectionMat())
         render.setShaderInput("offset", self.offset)
