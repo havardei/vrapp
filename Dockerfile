@@ -11,7 +11,20 @@ RUN apt-get -y update \
    xfce4-session \
    xfce4-settings \
    xorg \
-   xubuntu-icon-theme
+   xubuntu-icon-theme\
+   mesa-utils \
+   libgl1 \
+   libgl1-mesa-dri \
+   libgl1-mesa-glx \
+   libglapi-mesa \
+   libglvnd0 \
+   libglx-mesa0 \
+   libglx0
+
+
+COPY vnc /srv/conda/vnc
+COPY vnc/lib64 /usr/lib64
+
 # apt-get may result in root-owned directories/files under $HOME
 RUN chown -R $NB_UID:$NB_GID $HOME
 
