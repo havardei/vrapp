@@ -35,3 +35,4 @@ USER $NB_USER
 RUN cd /opt/install && \
    conda env update -n base --file environment.yml &&\
    pip install -r requirements.txt
+RUN mkdir -p $HOME/.config/autostart && cp /opt/install/app.desktop $HOME/.config/autostart/.

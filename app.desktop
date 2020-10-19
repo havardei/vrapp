@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Chimera
+Exec=/opt/install/binderstart.sh
+Path=
+StartupNotify=false
