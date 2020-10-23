@@ -19,7 +19,6 @@ class MinimalOpenVR(P3DOpenVR):
                   openvr.TrackedControllerRole_RightHand: 'Right',
                   openvr.TrackedControllerRole_OptOut: 'Opt out',
                   openvr.TrackedControllerRole_Treadmill: 'Treadmill',
-                  openvr.TrackedControllerRole_Stylus: 'Stylus',
                 }
 
     buttons_map = { openvr.k_EButton_System: 'System',
