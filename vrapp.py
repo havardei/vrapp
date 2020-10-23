@@ -260,7 +260,7 @@ class World(DirectObject):
         dlnp.setHpr(0, 180+20, 0)
         render.setShaderInput("dlight0", dlnp)
         render.setLight(dlnp)
-        self.boat = Actor("res/boat.obj")
+        self.boat = Actor("res/boat.bam")
         #self.boat = loader.loadModel("res/boat.obj")
         self.boat.setZ(-2)
         self.boat.setScale(0.01)
