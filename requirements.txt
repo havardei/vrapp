@@ -4,3 +4,4 @@ PyOpenGL
 Pillow
 openvr
 panda3d
+panda3d-openvr
