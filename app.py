@@ -7,10 +7,10 @@ import random
 livedata = False
 
 def updatePose(boat):
-    MAXP = 30
-    MINP = -30
-    MAXR = 5
-    MINR = -5
+    MAXP = 5
+    MINP = -5
+    MAXR = 10
+    MINR = -10
 
     if(livedata):
         print(boat.getH())
@@ -19,37 +19,51 @@ def updatePose(boat):
     else:
         if boat.pport:
             if boat.getP()<0:
-                boat.setP(boat.getP()+(1-(boat.getP()/MINP)))
-            elif boat.getP()<MAXP-1:
-                boat.setP(boat.getP()+(1-(boat.getP()/MAXP)))
-            if boat.getP() >= MAXP-1:
+                boat.setP(boat.getP()+(1-(boat.getP()/MINP))/12)
+            elif boat.getP()<MAXP-0.5:
+                boat.setP(boat.getP()+(1-(boat.getP()/MAXP))/12)
+            if boat.getP() >= MAXP-0.5:
                 boat.pport = False
         else:
             if boat.getP()>0:
-                boat.setP(boat.getP()-(1-(boat.getP()/MAXP)))
-            elif boat.getP()>MINP:
-                boat.setP(boat.getP()-(1-(boat.getP()/MINP)))
-            if boat.getP() <= MINP+1:
+                boat.setP(boat.getP()-(1-(boat.getP()/MAXP))/12)
+            elif boat.getP()>MINP+0.5:
+                boat.setP(boat.getP()-(1-(boat.getP()/MINP))/12)
+            if boat.getP() <= MINP+0.5:
                 boat.pport = True
 
         if boat.rbow:
             if boat.getR()<0:
-                boat.setR(boat.getR()+(1-(boat.getR()/MINR))/10)
+                boat.setR(boat.getR()+(1-(boat.getR()/MINR))/5)
             elif boat.getR()<MAXR-1:
-                boat.setR(boat.getR()+(1-(boat.getR()/MAXR))/10)
+                boat.setR(boat.getR()+(1-(boat.getR()/MAXR))/5)
             if boat.getR() >= MAXR-1:
                 boat.rbow = False
         else:
             if boat.getR()>0:
-                boat.setR(boat.getR()-(1-(boat.getR()/MAXR))/10)
-            elif boat.getR()>MINR:
-                boat.setR(boat.getR()-(1-(boat.getR()/MINR))/10)
+                boat.setR(boat.getR()-(1-(boat.getR()/MAXR))/5)
+            elif boat.getR()>MINR+1:
+                boat.setR(boat.getR()-(1-(boat.getR()/MINR))/5)
             if boat.getR() <= MINR+1:
                 boat.rbow = True
 
 
 class World(DirectObject):
+    def toggleView(self):
+        if self.fpView:
+            self.fpView = False
+            base.camera.setPosHpr(-50,-50,20,-47,-10,0)
+            base.camera.wrtReparentTo(render)
+#            base.enableMouse()
+        else:
+            base.disableMouse()
+            self.fpView = True
+            self.pivotNode.setPosHpr(0,0,-2,0,0,0)
+            self.boat.setHpr(0,0,0)
+            base.camera.setPosHpr(0,0,3.2,0,0,0)
+            base.camera.wrtReparentTo(self.pivotNode)
     def __init__(self):
+        self.fpView = False
         self.cloud_root=render.attachNewNode('cloudRoot')
         cloud_lod = FadeLODNode('cloud_lod')
         cloud = NodePath(cloud_lod)
@@ -150,16 +164,23 @@ class World(DirectObject):
         render.setShaderInput("dlight0", dlnp)
         render.setLight(dlnp)
         self.boat = Actor("res/boat.obj")
+        #self.boat = loader.loadModel("res/boat.obj")
         self.boat.setZ(-2)
         self.boat.setScale(0.01)
         self.boat.pport = True
         self.boat.rbow = True
         self.boat.reparentTo(render)
-        base.camera.setPosHpr(15,-70,15,10,-7.42,0)
-        #self.wCamera.lookAt(self.boat)
-
+        self.boat.setHpr(0,0,0)
+        self.pivotNode = render.attachNewNode("environ-pivot")
+        self.pivotNode.setPosHpr(0,0,-2,0,0,0) # Set location of pivot point
+        #base.camera.wrtReparentTo(self.pivotNode)
+        self.accept("space", self.toggleView)
+        self.toggleView()
+        self.toggleView()
     def update(self, task):
+        #print(base.camera.getY())
         updatePose(self.boat)
+        self.pivotNode.setHpr(self.boat.getH(),self.boat.getP(),self.boat.getR())
         self.time+=task.time*self.cloud_speed
         self.offset+=task.time
         #water
@@ -192,6 +213,7 @@ class World(DirectObject):
         return task.again
 
 w = World()
-#base.disableMouse()
-base.oobe()
+base.disableMouse()
+#base.oobe()
+#base.camera.setPosHpr(0,-50,5,0,0,0)
 base.run()
