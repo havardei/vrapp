@@ -281,6 +281,7 @@ class World(DirectObject):
         #print(base.camera.getY())
         updatePose(self.boat)
         self.pivotNode.setHpr(self.boat.getH(),self.boat.getP(),self.boat.getR())
+        self.vr.tracking_space.setPos(base.camera.getPos())
         self.time+=task.time*self.cloud_speed
         self.offset+=task.time
         #water
